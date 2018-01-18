@@ -1,0 +1,53 @@
+' This file by Felix Wohlfrom is licensed under the Creative Commons Attribution-ShareAlike 4.0 
+' International License. To view a copy of this license, visit 
+' http://creativecommons.org/licenses/by-sa/4.0/ or send a  letter to Creative Commons, PO Box 
+' 1866, Mountain View, CA 94042, USA.
+'
+'
+' This file contains an example command flow between a smartphone as client
+' and a pc as server. It is using plantuml (http://plantuml.com/) which is then converted to a 
+' png file.
+
+@startuml
+
+participant "Server (PC)" as Server
+participant "Client (Smartphone)" as Client
+
+hide footbox
+group Connection initiation
+    Server <-- Client: Connect
+    Server -> Client: Send supported version
+    note right
+        E.g.
+        { 
+            "type": "VERSION",
+            "data": "{ 'minVersion': 1,
+                          'maxVersion': 2 }"
+        }
+    end note
+    Client -> Client: Check if supported versions by\n client match supported version by server
+end
+
+alt No matching versions
+    Client --> Server: disconnect
+
+else Versions matching
+    loop While presentation is running
+        Client -> Server: Send command
+        note right
+            E.g. 
+            { 
+                "type": "COMMAND",
+                "data": "nextSlide"
+            }
+        end note
+    end
+end
+...
+alt
+    Server --> Client: disconnect
+else
+    Client --> Server: disconnect
+end
+
+@enduml
