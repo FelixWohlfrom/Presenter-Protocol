@@ -60,6 +60,7 @@ client and server if they implement this presenter protocol.
     packed into so called *messages*.  
     These *messages* MUST be structured as the following json encoded
     text:
+
     ```
     {
         "type": <msg_type>,
@@ -67,15 +68,17 @@ client and server if they implement this presenter protocol.
     }
     ```
 
-    The following values MUST be supported for *<msg_type>*:   
+    The following values MUST be supported for *&lt;msg_type&gt;*:  
     VERSION  
     COMMAND  
     
-    The *<msg_data>* is a String. The content of the string depends on
-    the *<msg_type>* and is now described in detail:
-   1. <a name="msg_version">*<msg_type>* VERSION  
-        The *<msg_data>* MUST be a json string having the following
+    The *&lt;msg_data&gt;* is a string. The content of the string depends on
+    the *&lt;msg_type&gt;* and is now described in detail:
+
+    1. <a name="msg_version">*&lt;msg_type&gt;* VERSION  
+        The *&lt;msg_data&gt;* MUST be a json string having the following
         structure:
+
         ```
         {
             "minVersion": <min_version>,
@@ -83,25 +86,25 @@ client and server if they implement this presenter protocol.
         }
         ```
         
-        *<min_version>* MUST contain the minimum version of commands
+        *&lt;min_version&gt;* MUST contain the minimum version of commands
         that is supported by the current connection.  
         
-        *<max_version>* MUST contain the maximum version of commands
+        *&lt;max_version&gt;* MUST contain the maximum version of commands
         that is supported by the current connection.
         
         The server or client MUST support all commands that are
-        defined for the range between *<min_version>* and 
-        *<max_version>*, including both boundary values.
+        defined for the range between *&lt;min_version&gt;* and 
+        *&lt;max_version&gt;*, including both boundary values.
 
-   1.  <a name="msg_command" /> *<msg_type>* COMMAND  
-        The *<msg_data>* MUST be a simple string. Valid values for 
+    1. <a name="msg_command" />*&lt;msg_type&gt;* COMMAND  
+        The *&lt;msg_data&gt;* MUST be a simple string. Valid values for 
         the commands are defined in the chapter 
-        "[Command definition](#command-definition)"
+        "[Command definition](#command-definition)".
 
 
 ### Connection initiation
 Once the first client established a connection to the server, the server
-MUST response with a [*<msg_type>* VERSION](#msg_version) message.
+MUST response with a [*&lt;msg_type&gt;* VERSION](#msg_version) message.
 
 The client SHOULD now check if the command versions supported by the
 server and the command versions supported by the client match. If the
@@ -113,9 +116,9 @@ commands to the server.
 
 ### Command definition
 The following table describes the commands that can be sent using the
-[*<msg_type>* COMMAND](#msg_command).  
+[*&lt;msg_type&gt;* COMMAND](#msg_command).  
 The "*Command*" row contains the command, that is sent in the 
-*<msg_data>* field.  
+*&lt;msg_data&gt;* field.  
 The "*Min Version*" row contains the minimum protocol version that MUST
 be supported by both server and client to transmit the command.  
 The "*Max Version*" row contains the maximum protocol version that MUST
@@ -139,6 +142,7 @@ client and server.
 In this message, the server notifies the client that it supports all
 commands from command version 1 up to command version 3. This means that
 the server supports commands version 1, 2 and 3:
+
 ```
 {
     "type": "VERSION",
@@ -148,6 +152,7 @@ the server supports commands version 1, 2 and 3:
 
 This message notifies the client, that only command version 2 and
 commands version 3 are supported by the server:
+
 ```
 {
     "type": "VERSION",
@@ -158,6 +163,7 @@ commands version 3 are supported by the server:
 ### Command messages
 This command message is sent from the client to the server to request
 a switch to the previous slide of a currently running presentation:
+
 ```
 {
     "type": "COMMAND",
@@ -167,6 +173,7 @@ a switch to the previous slide of a currently running presentation:
 
 This command message is sent from the client to the server to continue
 the presentation on the next slide:
+
 ```
 {
     "type": "COMMAND",
@@ -193,6 +200,8 @@ If there is a matching version range, the client will send regularly
 command messages to the server.
 
 Finally, both server and client can close the connection.
+
+This flow is shown in the following figure.
 
 ![Example command flow](./diagrams/gen/CommandFlow.png)
 
